@@ -14,13 +14,15 @@ module Game
       @image = img
       @image.set_color_key(C_WHITE) # 指定された画像のC_WHITE（白色）部分を透明化
       @map = map
-      @g = 32
+      @g = 1
       @speed_x = 0
       @speed_y = 0
       #@jump_power = 0
       #@jump_angle = 0
       @jump_flag = false
       @jump_end = 0
+      @speed = 4
+      # @c_bottom = true
     end
 
     # 1フレームにおけるプレイヤーの挙動更新
@@ -66,9 +68,15 @@ module Game
     # 未考慮ポイント３: 左右どちらかが壁に接している場合、ジャンプした瞬間の当たり判定でジャンプが止められてしまう。
     # 　　　　　　　　　これを防止するにはどのような解決策が考えられるか？
     def start_jump
-      @jump_flag = true
-      @jump_end = -10
-      p "start_jump"
+      p "c_bottom = #{@collision_bottom}"
+      if @collision_bottom = true
+        @jump_flag = true
+        @jump_end = -50
+        p "start_jump"
+      else
+        @jump_flag = false
+      end
+      
       # player_pos = [@x, @y]
       # jump_to = [player_pos[0] + @speed_x * 10, player_pos[1] - 10]
       # @jump_power, @jump_angle = calc_vector(player_pos, jump_to)
@@ -102,26 +110,29 @@ module Game
 
     # プレイヤーに重力分の移動を加算
     def add_gravity_effect
-      @dy = @g
+      # @dy = @g
       # @dy += @jump_power * Math.sin(@jump_angle) if jumping?
       # @jump_power -= 2
       # @jump_power = 0 if @jump_power <= 0
+      #p "@dy = #{@dy}"
       @dy = @jump_end
-      if jumping?   
-        @jump_end += 0.5
-        p "@dy = #{@dy}"
-      else 
+      #p "@dy = #{@dy}"
+      #p "@c_bottom = #{@collision_bottom} , @jump_flag = #{@jump_flag}"
+      if @collision_bottom == false #&& @jump_flag == true   
+        @jump_end += 0.1
+        #p "@dy + @jump_end = #{@dy}" 
+      elsif @jump_flag == true && @collision_bottom == true
+       #p "#{@jump_flag}"
         @jump_flag = false
+        p "#{@jump_flag}"
         @jump_end = 0
       end
-      if Input.x == 1 && if  @collision_bottom == false
-          @dx = 3
-        end
-        @dx = 3
+      if Input.x == 1
+        @dx = @speed
       elsif Input.x == -1
-        @dx = -3
+        @dx = -1 * @speed
       else 
-        @dx = 0
+        @dx = 0        
       end
     end
 
@@ -197,8 +208,7 @@ module Game
 
     # ジャンプ中かどうかの判定
     def jumping?
-      @jump_flag == true && @collision_bottom == false
-      #@jump_end <= 10 && @jump_end >= -10
+      @jump_flag == true && @c_bottom == false
     end
   end
 end
