@@ -44,7 +44,7 @@ module Game
 
     # タイトル文字列描画
     def title_draw
-      Window.draw_font(50, 5, "Sample Game", @font)
+      Window.draw_font(50, 5, "team6", @font)
     end
   end
 end

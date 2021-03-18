@@ -19,6 +19,7 @@ module Ending
             #文字の描画
             Window.draw_font(300, 150, "GAME OVER", @font ,color: C_RED)
             Window.draw_font(350, 460, "RESTRAT : R_key", @font2 ,color: C_RED)
+            Scene.add(Game::Director.new, :game) #初期位置の初期化
             Scene.move_to(:opening) if Input.key_push?(K_R)
         end
     end

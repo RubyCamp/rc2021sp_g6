@@ -26,7 +26,7 @@ require_relative 'scenes/map_editor/button'
 
 Window.width = 1024
 Window.height = 768
-Window.caption = "RubyCamp 2021SP Sample1"
+Window.caption = "team6 game"
 
 Scene.add(Opning::Director.new, :opening)
 Scene.add(Game::Director.new, :game)

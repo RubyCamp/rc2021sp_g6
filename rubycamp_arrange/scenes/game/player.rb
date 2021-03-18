@@ -2,6 +2,8 @@ module Game
     # プレイヤーキャラクタの挙動を制御する
     class Player
       include MathHelper # 他のプログラムと共用する数学系ヘルパーメソッドを読み込む
+      attr_accessor :x
+      attr_accessor :y
   
       SPEED_LIMIT_X = 24 # X軸方向の速度上限
       require_relative '../ending/director'
@@ -215,7 +217,9 @@ module Game
       def stop_x_direction
         @dx = 0
         @speed_x = 0
-        Scene.move_to(:gameover)
+        if x > Window.width || x < 0 then
+          Scene.move_to(:gameover)
+        end
       end
   
       # Y軸方向の移動量をクリアする
