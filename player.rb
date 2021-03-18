@@ -166,6 +166,7 @@ module Game
     end
 
     # X軸方向の移動量をクリアする
+    #変更点　左右の何かに当たったら負け
     def stop_x_direction
       @dx = 0
       @speed_x = 0
