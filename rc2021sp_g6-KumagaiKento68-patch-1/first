@@ -1,0 +1,5 @@
+require 'dxruby'
+
+Windpw.loop do
+
+end
