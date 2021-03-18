@@ -1,6 +1,6 @@
 module Game
   # プレイヤーキャラクタの挙動を制御する
-  class Player
+  class Player < Sprite
     include MathHelper # 他のプログラムと共用する数学系ヘルパーメソッドを読み込む
 
     SPEED_LIMIT_X = 24 # X軸方向の速度上限
@@ -21,6 +21,7 @@ module Game
       @flag = false
       @jump_power = 0
       @speed = 4
+      @point = 0
     end
 
     # 1フレームにおけるプレイヤーの挙動更新
@@ -32,6 +33,7 @@ module Game
     def update(input_x)
       @debug_boxes = [] # Directorで表示させるデバッグ用のマップチップの座標を保持する。デバッグ専用の変数
 
+      p "#@point"
       # 1フレームの移動量計算に必要な各種変数を初期化
       init_variables
 
@@ -68,7 +70,7 @@ module Game
     def start_jump
       #フラグが立っていない & 床に足がついている
       if @jump_flag == false && @collision_bottom == true # && @flag == false 
-        p "jump start"
+        #p "jump start"
         @jump_flag = true
         @jump_power = -20
       end
@@ -102,40 +104,34 @@ module Game
     # プレイヤーに重力分の移動を加算 & ジャンプ処理
     def add_gravity_effect    
                
-      p "@collision_bottom = #@collision_bottom"
-      p "@jump_flag = #@jump_flag"
-      p "@flag = #@flag"
-      p "@y  = #@y"
-      p "@dy = #@dy"
+      # p "@collision_bottom = #@collision_bottom"
+      # p "@jump_flag = #@jump_flag"
+      # p "@flag = #@flag"
+      # p "@y  = #@y"
+      # p "@dy = #@dy"
 
-      # #start_jump
-      # if @jump_flag == true && @collision_bottom == true
-      #   p "jump"
-      #   p ""        
-      #   min_jump_power
-      #上昇中
       if @collision_bottom == true && @jump_flag == true && @jump_power < 0 
-        p "jump_up" 
-        p ""        
+        # p "jump_up" 
+        # p ""        
         min_jump_power
       #下降中
       elsif @jump_flag == true && @collision_bottom == false
-        p "jump_down"
-        p ""
+        # p "jump_down"
+        # p ""
         min_jump_power
       #着地
       elsif @jump_flag == true && @collision_bottom == true
-        p "stop"
-        p "" 
+        # p "stop"
+        # p "" 
         @dy += @speed
         @jump_flag = false
       elsif @collision_bottom == false
-        p "fall"
-        p ""
+        # p "fall"
+        # p ""
         @dy += @speed
       else
-        p "else"
-        p "" 
+        # p "else"
+        # p "" 
         @dy = 0
       end
 
@@ -172,7 +168,7 @@ module Game
 
       # y軸方向の判定
       if @dy >= 0
-        p "@c_b 代入"
+        #p "@c_b 代入"
         @collision_bottom = check_y_direction([@map.root_x + @x + MapChip::CHIP_SIZE / 2, @map.root_y + @y + MapChip::CHIP_SIZE], 1) # 下
       else
         @collision_top = check_y_direction([@map.root_x + @x + MapChip::CHIP_SIZE / 2, @map.root_y + @y], -1) # 上
@@ -184,12 +180,18 @@ module Game
       player_pos = @map.convert_win_to_map(win_pos)
       chip_num = @map.get_chip_num(player_pos)
       chip_weight = @map.get_chip_weight(chip_num)
-      if chip_weight == Map::WALL_CHIP_WEIGHT
+      if chip_weight == Map::COIN_CHIP_WEIGHT
+        @point += 10
+        return false
+      elsif chip_weight == Map::WALL_CHIP_WEIGHT
         player_view = @map.convert_map_to_win(player_pos)
         @debug_boxes << player_view if Director::DEBUG_MODE
         stop_x_direction
         @x = player_view[0].to_i - @map.root_x - (MapChip::CHIP_SIZE * offset)
         return true
+      # if chip_weight == Map::COIN_CHIP_WEIGHT
+      #   @point += 10
+      #   return false
       end
       return false
     end
@@ -199,6 +201,10 @@ module Game
       player_pos = @map.convert_win_to_map(win_pos)
       chip_num = @map.get_chip_num(player_pos)
       chip_weight = @map.get_chip_weight(chip_num)
+      # if chip_weight == Map::COIN_CHIP_WEIGHT
+      #   @point += 10
+      #   return false
+      # els
       if chip_weight == Map::WALL_CHIP_WEIGHT
         player_view = @map.convert_map_to_win(player_pos)
         @debug_boxes << player_view if Director::DEBUG_MODE
@@ -226,8 +232,7 @@ module Game
       @jump_power += 2     
       @dy += @jump_power
       #@dy += @speed
-      p "@dy = #@dy / @j_p = #@jump_power"
+      #p "@dy = #@dy / @j_p = #@jump_power"
     end
-
   end
 end
