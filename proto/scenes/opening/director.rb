@@ -16,7 +16,7 @@ module Opning
             Window.draw_box_fill(0, 0, Window.width, 500, [128, 255, 255])
             Window.draw_box_fill(0, 500, Window.width, Window.height, [185, 135, 11])
 
-            #キャラクター
+            #キャラクターの描画
             Window.draw_scale(250, 380, @image, 4, 4)
             @image.set_color_key(C_WHITE)
             Window.draw_scale(800, 310, @image2, 5, 5)
@@ -26,10 +26,10 @@ module Opning
 
             #タイトル文字
             Window.draw_font(350, 100, "GAME START", @font, color: C_YELLOW)
-            Window.draw_font(400, 184, "Push s key", @font, color:  C_YELLOW)
+            Window.draw_font(380, 184, "PUSH S_key", @font, color:  C_YELLOW)
 
-            Window.draw_font(400, 300, "左:← key   右:→ key", @font2, color:  C_BLACK)
-            Window.draw_font(400, 330, "ジャンプ:SPECE key", @font2, color:  C_BLACK)
+            Window.draw_font(380, 300, "左:← key   右:→ key", @font2, color:  C_BLACK)
+            Window.draw_font(380, 330, "ジャンプ:SPECE key", @font2, color:  C_BLACK)
             Scene.move_to(:game) if Input.key_push?(K_S)
         end
     end
